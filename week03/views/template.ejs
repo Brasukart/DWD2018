@@ -1,0 +1,31 @@
+<!DOCTYPE = HTML>
+<html lang=en>
+<head>
+<link href="/styles/styles.css" rel="stylesheet" type="text/css">
+<meta charsert="utf-8">
+<title>Gabriel's Cromulon fan page</title>
+</head>
+<body>
+    <img src="images/Cromulon.png" alt="cromulon head">
+    <h1 class="callAction">show me what you got!</h1>
+
+<form method="POST" action="/processit">
+<input type="text" name="textfield" value="Errr..."/>
+<input type="text" name="textfield02" value="I think..."/>
+
+<input type="submit" name="submitbutton" value="Get Schwifty!"/>
+
+  </form>
+
+
+
+    <% people.forEach(function(person){ %>
+        <h2><%= person.name %></h2>
+        <h3><%= person.other %></h3>
+
+  <%  }); %>
+
+  </body>
+
+
+</html>
