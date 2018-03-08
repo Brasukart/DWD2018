@@ -2,13 +2,18 @@
 //(2018 - update February 15) Config.js
 //(2018 - updated February 14) Adding Database
 //(2018 - updated February 13) Recreating the Express server exercise from DWD Servers class, but this time for localhosting. I'm comparing the originalr "server.js" with the "myapp/app.js" express file.
+//(2018 - update March) - Adding Cheerio to parse HTML data from a URL and then exihibit this data on the browser while storing it on my database.
 
 var config = require("./config.js");
 var express = require ('express');
 var bodyParser = require ('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: true});
-
-var path = require ('path')
+// var url ="https://www.indeed.com/cmp/Findly---New-York---NYU-(Hosted-Jobs)/jobs/Assistant-Associate-Research-Scientist-820be15f2b19585f?sjdu=Zzi_VW2ygsY1fzh3Ma9ZsE4zIT1NTXCwgFBhdjeTC3MlEUIEyXxTWn9zDNDDoDOmN1o3gDCq0F_RyXjtt2GzkQ&tk=1c830c9jga35rd1f&vjs=3";
+var port = 8080;
+var path = require ('path');
+var request = require('request');
+var cheerio = require('cheerio');
+var fs = require('fs');
 var app = express();
 
 //Connect to mLab MongoDB database (after installing the node module)
@@ -21,8 +26,23 @@ console.log(config.db_username);
 //mongodb://<dbuser>:<dbpassword>@ds235768.mlab.com:35768/dwd2018
 //var db = mongojs("username:password@example.com:port/mydb", ["mycollection"]);
 
-app.listen(8080, function(){
-  console.log('Local host server on port 8080...')
+app.listen(port, function(){
+  console.log('Local host server on port ' + port);
+})
+
+//Use cheerio to parse the "body" of a page and return a ".class"
+
+
+  //save it to Database
+
+  // db.DBtest00.save({"companyNameText":companyName.text}, function(err, saved){
+  //     if( err || !saved) console.log("Cheerio Not saved");
+  //
+  //     else console.log("Cheerio saved");
+
+
+
+
 })
 
 
@@ -63,24 +83,36 @@ app.use(express.static(__dirname + '/public'));
 // });
 
 //(OPTION 02-B test) Array of DATA//
-app.get('/templatetest', function (req, res){
-   var data= {people: [{name: "textfield", other: "blah"}, {name: "textfield02", other: "No"}, {name: "Pedro", other: "Nope"}]};
-   res.render('template.ejs', data);
+// app.get('/templatetest', function (req, res){
+//    var data= {people: [{name: "textfield", other: "blah"}, {name: "textfield02", other: "No"}, {name: "Pedro", other: "Nope"}]};
+//    res.render('template.ejs', data);
+//
+// });
 
-});
 
-//"post" request
-app.post('/processit', function(req, res) {
+
+app.post('/processit', function(req, res, body) {
     var textvalue = req.body.textfield;
-    var textvalue02 = req.body.textfield02;
-    res.send("What make you think you are going to achieve " + textvalue +" ?!!"+ "And how dare you say " + textvalue02 +"? Not COOL!");
+    var $ = cheerio.load(body)
+    var companyName =$('.company');
+    // var companyNameText = companyName.text();
+    console.log(companyName);
+    res.send("Your site is showing this:" + textvalue + "Neat!");
     //DB: Insert a record into the Database. (update Shawn 0215: cut and pasted the "db.DBtest00.save..."" inside this "app.post")
-    db.DBtest00.save({"textfield":textvalue, "textfield02":textvalue02}, function(err, saved){
-        if( err || !saved) console.log("Not saved");
-
-        else console.log("saved");
-    });
+    // db.DBtest00.save({"textfield":textvalue, "textfield02":textvalue02}, function(err, saved){
+    //     if( err || !saved) console.log("Not saved");
+    //
+    //     else console.log("saved");
+    // });
   });
+
+  // request(url, function(err, resp, body){
+  //   var $ = cheerio.load(body);
+  //   var companyName =$('.company');
+  //   //have to declare second variable (cheerio jquery youtube video)
+  //   var companyNameText = companyName.text();
+  //
+  //   console.log(companyNameText);
 
 
 //simple request//

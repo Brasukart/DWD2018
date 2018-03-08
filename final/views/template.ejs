@@ -1,0 +1,31 @@
+<!DOCTYPE = HTML>
+<html lang=en>
+<head>
+<link href="/styles/styles.css" rel="stylesheet" type="text/css">
+<meta charsert="utf-8">
+<title>Gabriel's web scrubber page</title>
+</head>
+<body>
+    <img src="images/Cromulon.png" alt="cromulon head">
+    <h1 class="callAction">What color is your website?</h1>
+
+<form method="POST" action="/processit">
+<input type="text" name="textfield" value="copy paste URL here"/>
+
+
+<input type="submit" name="submitbutton" value="submit"/>
+
+  </form>
+
+
+
+    <% people.forEach(function(person){ %>
+        <h2><%= person.name %></h2>
+        <h3><%= person.other %></h3>
+
+  <%  }); %>
+
+  </body>
+
+
+</html>
